@@ -1,7 +1,9 @@
 package hiber.model;
 
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+
+import java.util.Objects;
 
 
 @Entity
@@ -9,8 +11,9 @@ import jakarta.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="user_id")
+    private Long userId;
 
     @Column(name = "name")
     private String firstName;
@@ -34,12 +37,12 @@ public class User {
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long id) {
+        this.userId = id;
     }
 
     public String getFirstName() {
@@ -77,11 +80,24 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-               "id=" + id +
+               "id=" + userId +
                ", firstName='" + firstName + '\'' +
                ", lastName='" + lastName + '\'' +
                ", email='" + email + '\'' +
                ", car=" + userCar.getModel() + " " + userCar.getSeries() + '\'' +
                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userId, user.userId) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(userCar, user.userCar);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, firstName, lastName, email, userCar);
     }
 }

@@ -1,13 +1,16 @@
 package hiber.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "cars")
 public class Car {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "car_id")
+    private Long carId;
     @Column(name = "model")
     private String model;
     @Column(name = "series")
@@ -18,17 +21,18 @@ public class Car {
     public Car() {
 
     }
+
     public Car(String model, int series) {
         this.model = model;
         this.series = series;
     }
 
-    public Long getId() {
-        return id;
+    public Long getCarId() {
+        return carId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void getCarId(Long id) {
+        this.carId = id;
     }
 
     public String getModel() {
@@ -58,9 +62,22 @@ public class Car {
     @Override
     public String toString() {
         return "Car{" +
-               "id=" + id +
-               ", model='" + model + '\'' +
-               ", series=" + series +
-               '}';
+                "id=" + carId +
+                ", model='" + model + '\'' +
+                ", series=" + series +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return series == car.series && Objects.equals(carId, car.carId) && Objects.equals(model, car.model) && Objects.equals(user, car.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(carId, model, series, user);
     }
 }
